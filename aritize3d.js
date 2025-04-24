@@ -1,7 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const modelId = e.target.dataset.modelid;
-    const encodedId = btoa(modelId.toString());
-    console.log(encodedId);
+    const target = document.querySelector(".threed_buttons");
+    if (target) {
+        const modelId = target.dataset.modelid;
+        const encodedId = btoa(modelId.toString());
+
+        fetch('https://ncr.preqservices.com/ajax/models/check-model-status.php?action=check&modelid=' + encodedId)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'Active') {
+                    target.style.display = 'block';
+                } else {
+                    target.style.display = 'none';
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching model status:", error);
+                target.style.display = 'none';
+            });
+    }
     const style = document.createElement("style");
     style.textContent = ` .btn{background-color:#007bff;color:#fff;padding:10px 20px;border:none;border-radius:5px;font-size:16px;cursor:pointer}.btn:hover{background-color:#0056b3}.custom-modal{display:none;position:fixed;z-index:9999;inset:0;background-color:rgb(0 0 0 / .6);justify-content:center;align-items:center}.modal-box{background:#fff;width:80%;max-width:1000px;border-radius:12px;overflow:hidden;display:flex;flex-direction:column}.modal-header{display:flex;justify-content:flex-end;padding:10px}.close-btn{font-size:28px;cursor:pointer;border:none;background:none}model-viewer{width:100%;height:500px}.model-id{text-align:center;padding:10px 0;font-weight:700;font-size:16px;color:#007bff}.modal-footer{display:flex;justify-content:space-around;padding:10px;border-top:1px solid #ccc;background-color:#f9f9f9;font-size:14px}.footer-icon{text-align:center;color:#333;cursor:pointer}.footer-icon span{display:block;font-size:12px;margin-top:4px}`;
     document.head.appendChild(style);
@@ -17,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const closeBtn = modal.querySelector(".close-btn");
     const modelIdText = modal.querySelector("#modelIdText");
     document.addEventListener("click", (e) => {
-        if (e.target.matches(".btn[data-modelid]")) {
+        if (e.target.matches(".threed_buttons[data-modelid]")) {
             
             viewer.src = "https://modelviewer.dev/shared-assets/models/Astronaut.glb";
             modelIdText.textContent = modelId;
