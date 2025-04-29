@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+
 const cdg_urlParams = new URLSearchParams(window.location.search);
     const cdg_quickAR = cdg_urlParams.get('quick-ar-open');
   
@@ -679,4 +679,4 @@ model-viewer {
         document.getElementById('cdg-share-link').value = currentUrl;
     
     });
-});
+
