@@ -471,10 +471,10 @@ model-viewer {
             const encodedId = btoa(modelId.toString());
             const userAgent = navigator.userAgent;
 
-            console.log('platform', platform);
-            console.log('domain', domain);
-            console.log('genKey', genKey);
-            console.log('clientAccessKey', clientAccessKey);
+            // console.log('platform', platform);
+            // console.log('domain', domain);
+            // console.log('genKey', genKey);
+            // console.log('clientAccessKey', clientAccessKey);
             
             cdg_modal.style.display = "flex"; // First open the modal
             cdg_modelIdText.textContent = modelId.toUpperCase();;
@@ -489,7 +489,7 @@ model-viewer {
                             console.log(data);
                             if (data.status === 'Ok' && data.file_url) {
                                 loadGLBFromStaticPath(data.file_url);
-                                var ar_uri = `https://ncr.preqservices.com/ar/ar.php?platform=${platform}&domain=${domain}&modelid=${encodedId}&ip=${ipData.ip}&useragent=${userAgent}&filetype=${filetype}`;
+                                var ar_uri = `https://ncr.preqservices.com/ar/ar.php?modelid=${encodedId}&filetype=${filetype}&domain=${domain}`;
                                
                                
                                 document.getElementById('cdg-qr-img').innerHTML = '<img src="https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(ar_uri) + '&size=150x150">';
@@ -679,4 +679,3 @@ model-viewer {
         document.getElementById('cdg-share-link').value = currentUrl;
     
     });
-
