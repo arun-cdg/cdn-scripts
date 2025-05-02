@@ -12,7 +12,7 @@ const cdg_urlParams = new URLSearchParams(window.location.search);
             .then(data => {
                 if (data.status === 'Active') {
                     button.style.display = 'block';
-
+                     document.querySelector('.threedy-3d-btn').style.display = 'block';
                     if (cdg_quickAR === "1") {
                         const cdg_view_3d_btn = document.querySelector("[data-threedy-web-id]");
                         if (cdg_view_3d_btn) {
