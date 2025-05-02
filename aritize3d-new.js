@@ -12,6 +12,8 @@ const cdg_urlParams = new URLSearchParams(window.location.search);
             .then(data => {
                 if (data.status === 'Active') {
                     button.style.display = 'block';
+                    document.querySelector('.threedy-3d-btn').style.display = 'block';
+                    console.log('model is changed');
 
                     if (cdg_quickAR === "1") {
                         const cdg_view_3d_btn = document.querySelector("[data-threedy-web-id]");
@@ -32,13 +34,19 @@ const cdg_urlParams = new URLSearchParams(window.location.search);
 
     const style = document.createElement("style");
     style.textContent = `.threedy-embed-btn {
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 20px;
+    display: inline-block;
+    height: 50px;
+    padding: 12px 32px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 26px;
+    text-align: center;
+    color: #ffffff;
+    background: linear-gradient(90deg, #0038a8 0%, #4a57c8 100%);
+    border-radius: 8px;
+    cursor: pointer;
     border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer
 }
 
 .threedy-embed-btn:hover {
@@ -46,6 +54,16 @@ const cdg_urlParams = new URLSearchParams(window.location.search);
 }
 
 .cdg-custom-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    inset: 0;
+    background-color: rgb(0 0 0 / .6);
+    justify-content: center;
+    align-items: center
+}
+
+.cdg-ar-custom-modal {
     display: none;
     position: fixed;
     z-index: 9999;
@@ -63,7 +81,8 @@ const cdg_urlParams = new URLSearchParams(window.location.search);
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    height: 90%
+    height: 90%;
+    overflow: auto;
 }
 
 .cdg-modal-header {
@@ -327,12 +346,164 @@ model-viewer {
   background-color: #333647;
 }
 
+/* ar model */
+.cdg-ar-model {
+  display: block;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  width: auto;
+  text-align: center;
+  max-height: 90%;
+  overflow: auto;
+}
+
+.cdg-ar-model-close-btn {
+    font-size: 28px;
+    cursor: pointer;
+    border: none;
+    background: none
+}
+
+.cdg-ar-popup-content_h2 {
+  font-size: 22px;
+  margin-bottom: 20px;
+  color: #1d1f2b;
+}
+
+.cdg-ar-popup-content_p {
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 15px;
+  line-height: 1.4;
+}
+
+.cdg-ar-qr-container {
+  margin: 20px 0;
+}
+
+.cdg-ar-qr-container img {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border-radius: 8px;
+}
+
+.cdg-ar-note-box {
+  background: #f5f5f7;
+  padding: 12px;
+  border-radius: 10px;
+  margin: 20px 0;
+  font-size: 12px;
+  color: #666;
+  text-align: center;
+}
+
+.cdg-ar-note-box p {
+  margin: 4px 0;
+}
+
+.cdg-ar-got-it-close-btn {
+  margin-top: 20px;
+  padding: 10px 30px;
+  background-color: #1d1f2b;
+  color: #ffffff;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.cdg-ar-got-it-close-btn:hover {
+  background-color: #333647;
+}
+
+.mobile-insctructions {
+    padding: 20px;
+    position: relative;
+    text-align: center;
+  }
+
+  .mobile-insctructions h2 {
+    font-size: 30px;
+    margin-bottom: 16px;
+    color: #333;
+  }
+
+  .mobile-insctructions img.main-img {
+    width: 100%;
+    max-height: 150px;
+    object-fit: contain;
+    margin-bottom: 12px;
+  }
+
+  .mobile-insctructions p {
+    font-size: 25px;
+    color: #555;
+    margin-bottom: 20px;
+  }
+
+  .mobile-insctructions-ar-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .mobile-insctructions-ar-box {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  .mobile-insctructions-ar-box img {
+    width: 30px;
+    height: 30px;
+    margin-bottom: 6px;
+  }
+
+  .mobile-insctructions-ar-box span {
+    display: block;
+    font-size: 13px;
+    color: #333;
+  }
+
+    .desktop-insctructions {
+      display: block;
+    }
+
+    .mobile-insctructions {
+      display: none;
+    }
+
+    @media screen and (max-width: 767px) {
+      .desktop-insctructions {
+        display: none;
+      }
+
+      .mobile-insctructions {
+        display: block;
+      }
+    }
+
 `;
     document.head.appendChild(style);
     const script = document.createElement("script");
     script.type = "module";
     script.src = "https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js";
     document.head.appendChild(script);
+
+    const meta_1 = document.createElement("meta");
+    meta_1.charset = "UTF-8";
+    document.head.appendChild(meta_1);
+
+    const meta_2 = document.createElement("meta");
+    meta_2.name = "viewport";
+    meta_2.content = "width=device-width, initial-scale=1.0";
+    document.head.appendChild(meta_2);
 
     const cdg_modal = document.createElement("div");
     cdg_modal.className = "cdg-custom-modal";
@@ -350,7 +521,7 @@ model-viewer {
                     <center><p style="padding: 50px 0;" id="cdg-load_per">Loading...</p></center>
                 </div>
                 <div class="cdg-model-view cdg-load_2 cdg_d-none">
-                      <div class="desktop-insctructions">
+                    <div class="desktop-insctructions">
                         <center><h2 class="cdg-instruction_head">How to Use Our 3D Viewer</h2></center>
                         <div class="cdg-instructions">
                             <div class="cdg-instruction">
@@ -378,10 +549,30 @@ model-viewer {
                                 <p class="cdg-instruction_text">Hold CTRL and drag your mouse to pan the object.</p>
                             </div>
                         </div>
-                        <center><button id="cdg-gotItButton" class="cdg-instruction_button">Got it!</button></center>
                     </div>
                     <div class="mobile-insctructions">
+                        <h2>How to use our AR Viewer</h2>
+                        <img src="https://ncr.preqservices.com/asset/mob-ar.svg" alt="AR diagram" class="main-img">
+                        <p>Aim your camera at the floor or a flat surface to anchor your object.</p>
+
+                        <div class="mobile-insctructions-ar-actions">
+                        <div class="mobile-insctructions-ar-box">
+                            <div class="cdg-icon" style="background: url(https://ncr.preqservices.com/asset/mob-rotate.svg) no-repeat scroll center left transparent;background-position: center;">
+                                <p><strong>Rotate</strong></p>
+                            </div>
+                        </div>
+                        <div class="mobile-insctructions-ar-box">
+                                <div class="cdg-icon" style="background: url(https://ncr.preqservices.com/asset/mob-zoom.svg) no-repeat scroll center left transparent;background-position: center;">
+                                    <p><strong>Zoom in/out</strong></p>
+                                </div>
+                        </div>
+                        </div>
+
+                        <p style="margin-top: 25px; font-size: 13px; color: #666;">
+                        Press and drag the object to rotate it 360. Pinch and expand to zoom in and out.
+                        </p>
                     </div>
+                        <center><button id="cdg-gotItButton" class="cdg-instruction_button">Got it!</button></center>
                 </div>
                 <div class="cdg-modal-ar-qr" style="display: none;">
 
@@ -452,15 +643,58 @@ model-viewer {
     `;
     document.body.appendChild(cdg_modal);
 
+    const cdg_ar_modal = document.createElement("div");
+    cdg_ar_modal.className = "cdg-ar-custom-modal";
+    cdg_ar_modal.style.display = "none";
+    cdg_ar_modal.innerHTML = `
+        <div class="cdg-ar-model">
+            <div class="cdg-modal-header">
+                <button class="cdg-ar-model-close-btn" title="Close">&times;</button>
+            </div>
+            <div class="cdg-modal-body">
+                <div class="show">
+                    <div class="cdg-ar-popup-content">
+                        <div class="cdg-modal-ar-qr">
+                            <div class="cdg-qr-par">
+                                <center>
+                                    <h2 class="cdg-ar-popup-content_h2">Scan the QR code to view in AR</h2>
+                                    <p class="cdg-ar-popup-content_p">Use your mobile device camera app to scan the code below.<br>
+                                        Tap the code that appears to launch this object in Augmented Reality.</p>
+                                    <div class="cdg-ar-qr-container" id="cdg-ar-qr-img">
+                                        QR Loading...
+                                    </div>
+                                    <br><br>
+                                    <div class="cdg-ar-note-box">
+                                        <b>Note</b> May not be compatible with older devices <br>
+                                        <b>Disclaimer</b> The 3D product model is indicative only.
+                                    </div>
+                                   <button class="cdg-ar-got-it-close-btn">Got it!</button>
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(cdg_ar_modal);
+
+
     const cdg_viewer = cdg_modal.querySelector("#cdg-viewer3D");
     const cdg_closeBtn = cdg_modal.querySelector(".cdg-close-btn");
+    const cdg_ar_closeBtn = cdg_ar_modal.querySelector(".cdg-ar-model-close-btn");
+    const cdg_ar_gotitBtn = cdg_ar_modal.querySelector(".cdg-ar-got-it-close-btn");
     const cdg_modelIdText = cdg_modal.querySelector("#cdg_modelIdText");
     const cdg_load_1 = cdg_modal.querySelector(".cdg-load_1");
     const cdg_load_2 = cdg_modal.querySelector(".cdg-load_2");
     const cdg_load_3 = cdg_modal.querySelectorAll(".cdg-load_3");
 
+    let cdg_insert_id;
+    let cdg_model_fetch_status = false;
     document.addEventListener("click", (e) => {
         const button = e.target.closest("[data-threedy-web-id]");
+        const cdg_button_text = e.target.textContent.trim();
+
         if (button) {
             const modelId = button.getAttribute("data-threedy-web-id");
             const filetype = button.getAttribute("data-threedy-sku");
@@ -471,39 +705,52 @@ model-viewer {
             const encodedId = btoa(modelId.toString());
             const userAgent = navigator.userAgent;
 
-            console.log('platform', platform);
-            console.log('domain', domain);
-            console.log('genKey', genKey);
-            console.log('clientAccessKey', clientAccessKey);
+            // console.log('platform', platform);
+            // console.log('domain', domain);
+            // console.log('genKey', genKey);
+            // console.log('clientAccessKey', clientAccessKey);
             
-            cdg_modal.style.display = "flex"; // First open the modal
-            cdg_modelIdText.textContent = modelId.toUpperCase();;
-            cdg_viewer.src = ""; // Clear previous model immediately
+            if(cdg_button_text == 'View in AR'){
+                cdg_ar_modal.style.display = "flex"; // First open the modal
+            }
+            else{
+                cdg_modal.style.display = "flex"; // First open the modal
+                cdg_modelIdText.textContent = modelId.toUpperCase();;
+                // cdg_viewer.src = ""; // Clear previous model immediately
+            }
 
-            fetch("https://api.ipify.org?format=json")
-                .then(response => response.json())
-                .then(ipData => {
-                    fetch(`https://ncr.preqservices.com/ajax/models/get-models.php?action=getfile&platform=${platform}&domain=${domain}&modelid=${encodedId}&ip=${ipData.ip}&useragent=${userAgent}&filetype=${filetype}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(data);
-                            if (data.status === 'Ok' && data.file_url) {
-                                loadGLBFromStaticPath(data.file_url);
-                                var ar_uri = `https://ncr.preqservices.com/ar/ar.php?platform=${platform}&domain=${domain}&modelid=${encodedId}&ip=${ipData.ip}&useragent=${userAgent}&filetype=${filetype}`;
-                               
-                               
-                                document.getElementById('cdg-qr-img').innerHTML = '<img src="https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(ar_uri) + '&size=150x150">';
-                            } else {
-                                console.warn("Model inactive or no file");
-                            }
-                        })
-                        .catch(error => {
-                            console.error("Error fetching 3D model:", error);
-                        });
-                })
-                .catch(error => {
-                    console.error("Error getting IP address:", error);
-                });
+            if(!cdg_model_fetch_status){
+
+                fetch("https://api.ipify.org?format=json")
+                    .then(response => response.json())
+                    .then(ipData => {
+                        fetch(`https://ncr.preqservices.com/ajax/models/get-models.php?action=getfile&platform=${platform}&domain=${domain}&modelid=${encodedId}&ip=${ipData.ip}&useragent=${userAgent}&filetype=${filetype}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data);
+                                if (data.status === 'Ok' && data.file_url) {
+                                    loadGLBFromStaticPath(data.file_url);
+                                    var ar_uri = `https://ncr.preqservices.com/ar/ar.php?modelid=${encodedId}&filetype=${filetype}&domain=${domain}`;
+                                   
+                                    document.getElementById('cdg-qr-img').innerHTML = '<img src="https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(ar_uri) + '&size=150x150">';
+                                    document.getElementById('cdg-ar-qr-img').innerHTML = '<img src="https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(ar_uri) + '&size=150x150">';
+    
+                                    cdg_insert_id = data.insert_id;
+                                    cdg_model_fetch_status = true;
+                                } else {
+                                    console.warn("Model inactive or no file");
+                                }
+                            })
+                            .catch(error => {
+                                console.error("Error fetching 3D model:", error);
+                            });
+                    })
+                    .catch(error => {
+                        console.error("Error getting IP address:", error);
+                    });
+            }
+
+            // handleInstructionsToggle();
 
         }
 
@@ -574,7 +821,24 @@ model-viewer {
         // Close modal
         if (e.target === cdg_modal || e.target === cdg_closeBtn) {
             cdg_modal.style.display = "none";
-            cdg_viewer.src = "";
+            // cdg_viewer.src = "";
+
+            fetch(`https://ncr.preqservices.com/ajax/models/get-models.php?action=closefile&insert_id=${cdg_insert_id}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error("Error fetching 3D model:", error);
+            });
+        }
+
+        // Close AR modal
+        if (e.target === cdg_ar_modal || e.target === cdg_ar_closeBtn  || e.target === cdg_ar_gotitBtn) {
+            cdg_ar_modal.style.display = "none";
+            console.log("clicked");
+            
+            // cdg_viewer.src = "";
         }
 
           // First, grab the button
@@ -632,6 +896,9 @@ model-viewer {
         // });
         // });
 
+        // cdg_closeBtn.addEventListener('click', () => {
+
+        // });
         const cdg_link_copyButton = document.getElementById('cdg-link-copy-button');
         const cdg_linkInput = document.getElementById('cdg-share-link');
       
@@ -679,3 +946,49 @@ model-viewer {
         document.getElementById('cdg-share-link').value = currentUrl;
     
     });
+    const threedybutton = document.querySelector('.threedy-3d-btn.threedy-embed-btn');
+    if(threedybutton)
+    {
+        const svgIcon = ` &nbsp;
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box" viewBox="0 0 16 16">
+           <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5 8 5.961 14.154 3.5zM15 4.239l-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464z"/>
+           </svg>
+       `;
+       
+       threedybutton.insertAdjacentHTML('beforeend', svgIcon);
+    }
+
+    const threedyarbutton = document.querySelector('.threedy-qar-btn.threedy-embed-btn');
+    if(threedyarbutton)
+    {
+        const svgarIcon = ` &nbsp;
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-upc-scan" viewBox="0 0 16 16">
+        <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5M3 4.5a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0z"/>
+        </svg>
+            `;
+
+        threedyarbutton.insertAdjacentHTML('beforeend', svgarIcon);
+    }
+
+    // function handleInstructionsToggle() {
+    //     const isMobile = window.innerWidth <= 767;
+    //     console.log(window.innerWidth);
+    //     console.log(isMobile);
+        
+    //     const desktopEl = document.querySelector('.desktop-instructions');
+    //     const mobileEl = document.querySelector('.mobile-instructions');
+    //     console.log(desktopEl);
+    //     console.log(mobileEl);
+        
+    //     if (desktopEl && mobileEl) {
+    //       desktopEl.style.display = isMobile ? 'none' : 'block';
+    //       mobileEl.style.display = isMobile ? 'block' : 'none';
+    //     }
+    //   }
+      
+    //   // Initial check
+    //   handleInstructionsToggle();
+      
+    //   // Re-check on resize
+    //   window.addEventListener('resize', handleInstructionsToggle);
+      
